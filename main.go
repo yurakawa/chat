@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"log"
 	"sync"
-	"html/template"
+	"text/template"
 	"path/filepath"
 )
 
@@ -17,7 +17,7 @@ type templateHandler struct {
 }
 
 // ServerHTTP is a http.HandleFunc that renders this template.
-func (t *templateHandler) ServerHTTP(w http.ResponseWriter, r *http.Request) {
+func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
 		t.templ = template.Must(template.ParseFiles(filepath.Join("templates", t.filename)))
 	})
@@ -27,22 +27,8 @@ func (t *templateHandler) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-
-
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`
-			<html>
-				<head>
-					<title>Chat</title>
-				</head>
-				<body>
-					Let's Chat
-				</bod>
-			</html>
-		`))
-	})
+	http.Handle("/", &templateHandler{filename: "chat.html"})
 
 	// Start web server
 	if err := http.ListenAndServe(":8080", nil); err != nil {
