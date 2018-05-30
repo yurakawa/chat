@@ -1,8 +1,10 @@
 # Chat
-WebSocketを使った簡易チャット
+Simple chat with WebSocket
 
-## build
+## build and run
 
     go build -o chat
-    ./chat -addr=":3000"
+    ./chat -addr=":8080"
     
+    
+## 
