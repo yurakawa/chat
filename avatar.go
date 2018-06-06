@@ -19,6 +19,7 @@ type Avatar interface {
 // AuthAvatar represents avatar data obtained at the time of authentication
 type AuthAvatar struct{}
 
+// UseAuthAvatar hold which AuthAvatar to use
 var UseAuthAvatar AuthAvatar
 
 // GetAvatarURL returns AuthAvatar's avatar image URL
