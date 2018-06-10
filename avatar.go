@@ -23,7 +23,7 @@ type Avatar interface {
 // AuthAvatar represents avatar data obtained at the time of authentication
 type AuthAvatar struct{}
 
-// UseAuthAvatar hold which AuthAvatar to use
+// UseAuthAvatar represents using UseAuthAvatar for avatar
 var UseAuthAvatar AuthAvatar
 
 // GetAvatarURL returns AuthAvatar's avatar image URL
@@ -39,7 +39,7 @@ func (AuthAvatar) GetAvatarURL(c *client) (string, error) {
 // GravatarAvatar represents avatar data it is registed at Gravatar
 type GravatarAvatar struct{}
 
-// UseGravatar hold which GravatarAvatar to use
+// UseGravatar represents using UseGravatar for avatar
 var UseGravatar GravatarAvatar
 
 // GetAvatarURL returns GravatarAvatar's avatar image URL
@@ -52,10 +52,13 @@ func (GravatarAvatar) GetAvatarURL(c *client) (string, error) {
 	return "", ErrNoAvatarURL
 }
 
+// FileSystemAvatar represents uploaded avatar data
 type FileSystemAvatar struct{}
 
+// UseFileSystemAvatar represents using FileSystemAvatar for avatar
 var UseFileSystemAvatar FileSystemAvatar
 
+// GetAvatarURL returns FileSystemAvatar'a avatar image URL
 func (FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
 	if userid, ok := c.userData["userid"]; ok {
 		if useridStr, ok := userid.(string); ok {
