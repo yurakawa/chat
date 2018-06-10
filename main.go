@@ -17,6 +17,13 @@ import (
 	"github.com/yurakawa/trace"
 )
 
+// set the active Avatar implementation
+var avatars Avatar = TryAvatars{
+	UseFileSystemAvatar,
+	UseAuthAvatar,
+	UseGravatar,
+}
+
 // templ represents a single templat
 type templateHandler struct {
 	once     sync.Once
@@ -53,9 +60,7 @@ func main() {
 		google.New("CLIENTID", "SECRET", "http://localhost:8080/auth/callback/google"),
 	)
 
-	//r := newRoom(UseAuthAvatar)
-	//r := newRoom(UseGravatar)
-	r := newRoom(UseFileSystemAvatar)
+	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
