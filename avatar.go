@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"io/ioutil"
 	"path/filepath"
 )
 
@@ -67,15 +66,9 @@ var UseFileSystemAvatar FileSystemAvatar
 
 // GetAvatarURL returns FileSystemAvatar'a avatar image URL
 func (FileSystemAvatar) GetAvatarURL(u ChatUser) (string, error) {
-	if files, err := ioutil.ReadDir("avatars"); err == nil {
-		for _, file := range files {
-			if file.IsDir() {
-				continue
-			}
-			if match, _ := filepath.Match(u.UniqueID()+"*", file.Name()); match {
-				return "/avatars/" + file.Name(), nil
-			}
-		}
+	matches, err := filepath.Glob(filepath.Join("avatars", u.UniqueID()+"*"))
+	if err != nil || len(matches) == 0 {
+		return "", ErrNoAvatarURL
 	}
-	return "", ErrNoAvatarURL
+	return "/" + matches[0], nil
 }
